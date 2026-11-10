@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbor Line CC</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0b1620; font-family: system-ui, sans-serif; color: #f2f5f7; }
+    canvas { display: block; }
+    .hud { position: fixed; pointer-events: none; text-shadow: 0 1px 3px #000a; font-weight: 600; }
+    #top { top: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 18px; align-items: center; font-size: 20px; }
+    #top .dock { color: #6fb0ff; } #top .raid { color: #ff8a6a; }
+    #clock { background: #0008; padding: 4px 12px; border-radius: 6px; min-width: 52px; text-align: center; }
+    #stats { bottom: 16px; left: 18px; font-size: 22px; line-height: 1.4; }
+    #hint { bottom: 16px; right: 18px; font-size: 13px; opacity: .8; text-align: right; }
+    #feed { top: 14px; right: 18px; font-size: 14px; text-align: right; }
+    #msg { top: 62%; left: 50%; transform: translateX(-50%); font-size: 18px; }
+    #cross { top: 50%; left: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; }
+    #cross::before, #cross::after { content: ""; position: absolute; background: #fff; }
+    #cross::before { left: 6px; top: 0; width: 2px; height: 14px; }
+    #cross::after { top: 6px; left: 0; height: 2px; width: 14px; }
+    #cross.hit::before, #cross.hit::after { background: #ff4040; }
+    #hurt { inset: 0; background: radial-gradient(transparent 40%, #c00a); opacity: 0; transition: opacity .35s; }
+    .overlay { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+               gap: 14px; background: #08121cb8; text-align: center; padding: 16px; }
+    .overlay[hidden] { display: none; }
+    .overlay h1 { margin: 0; font-size: clamp(32px, 7vw, 64px); letter-spacing: 2px; }
+    .overlay p { margin: 0; max-width: 520px; opacity: .85; }
+    button { font: inherit; font-size: 20px; font-weight: 700; padding: 10px 34px; border: 0; border-radius: 8px;
+             background: #f0b429; color: #1a1a1a; cursor: pointer; }
+    button:hover { background: #ffc94d; }
+  </style>
+</head>
+<body>
+  <div id="hurt" class="hud"></div>
+  <div id="cross" class="hud"></div>
+  <div id="top" class="hud"><span class="dock">DOCK <b id="sDock">0</b></span><span id="clock">1:30</span><span class="raid"><b id="sRaid">0</b> RAIDERS</span></div>
+  <div id="stats" class="hud">HULL <b id="hull">100</b><br>AMMO <b id="ammo">12</b> / 12</div>
+  <div id="feed" class="hud"></div>
+  <div id="msg" class="hud"></div>
+  <div id="hint" class="hud">WASD move · Mouse look · Space jump<br>Click fire · R reload · Esc pause</div>
+
+  <div id="title" class="overlay">
+    <h1>HARBOR LINE CC</h1>
+    <p>Dock team holds the bow, Raiders board from the stern. First team to 5 eliminations wins — or lead when the 90-second clock runs out.</p>
+    <button id="start">Start</button>
+  </div>
+  <div id="pause" class="overlay" hidden><h1>Paused</h1><p>Click to resume</p></div>
+  <div id="end" class="overlay" hidden><h1 id="endText"></h1><p id="endScore"></p><button id="restart">Restart</button></div>
+
+  <script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+  </script>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
